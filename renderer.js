@@ -1,23 +1,49 @@
-let sourcePath = '';
-let destPath = '';
-
-document.getElementById('selectSource').addEventListener('click', async () => {
-  sourcePath = await window.api.selectFolders();
-  document.getElementById('sourcePath').textContent = sourcePath || 'None';
-});
+let destinationRoot = '';
+let folderList = [];
+let comparisonResult = {};
 
 document.getElementById('selectDest').addEventListener('click', async () => {
-  destPath = await window.api.selectFolders();
-  document.getElementById('destPath').textContent = destPath || 'None';
+  destinationRoot = await window.api.selectDestination();
+  document.getElementById('destDisplay').textContent = destinationRoot || 'No destination selected';
 });
 
-document.getElementById('startBackup').addEventListener('click', async () => {
-  if (!sourcePath || !destPath) {
-    document.getElementById('status').textContent = 'Select both folders first.';
-    return;
-  }
+document.getElementById('compareBtn').addEventListener('click', async () => {
+  folderList = await window.api.getConfigFolders();
+  if (!destinationRoot || folderList.length === 0) return;
 
-  document.getElementById('status').textContent = 'Backing up...';
-  const result = await window.api.backupFiles(sourcePath, destPath);
-  document.getElementById('status').textContent = result;
+  comparisonResult = await window.api.compareAllFolders(folderList, destinationRoot);
+  renderTreeView(comparisonResult);
+});
+
+function renderTreeView(data) {
+  const container = document.getElementById('fileTree');
+  container.innerHTML = '';
+  for (const [folder, files] of Object.entries(data)) {
+    const ul = document.createElement('ul');
+    const folderTitle = document.createElement('li');
+    folderTitle.innerHTML = `<strong>${folder}</strong>`;
+    ul.appendChild(folderTitle);
+
+    files.forEach(file => {
+      const li = document.createElement('li');
+      li.innerHTML = `<input type="checkbox" data-source="${file.path}" data-relative="${folder}/${file.relative}" checked> ${file.relative}`;
+      ul.appendChild(li);
+    });
+
+    container.appendChild(ul);
+  }
+}
+
+document.getElementById('copyBtn').addEventListener('click', async () => {
+  const checkboxes = document.querySelectorAll('#fileTree input[type=checkbox]:checked');
+  const selectedFiles = Array.from(checkboxes).map(cb => ({
+    source: cb.getAttribute('data-source'),
+    relative: cb.getAttribute('data-relative')
+  }));
+
+  if (selectedFiles.length === 0 || !destinationRoot) return;
+
+  document.getElementById('status').textContent = 'Copying...';
+  await window.api.copySelectedFiles(selectedFiles, destinationRoot);
+  document.getElementById('status').textContent = 'Copy complete.';
 });

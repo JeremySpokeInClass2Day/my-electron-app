@@ -1,6 +1,10 @@
 const { contextBridge, ipcRenderer } = require('electron');
 
 contextBridge.exposeInMainWorld('api', {
-  selectFolders: () => ipcRenderer.invoke('select-folders'),
-  backupFiles: (source, destination) => ipcRenderer.invoke('backup-files', { source, destination })
+  getConfigFolders: () => ipcRenderer.invoke('get-config-folders'),
+  selectDestination: () => ipcRenderer.invoke('select-destination'),
+  compareAllFolders: (sourceFolders, destinationRoot) =>
+    ipcRenderer.invoke('compare-all-folders', { sourceFolders, destinationRoot }),
+  copySelectedFiles: (paths, destinationRoot) =>
+    ipcRenderer.invoke('copy-selected-files', { paths, destinationRoot })
 });

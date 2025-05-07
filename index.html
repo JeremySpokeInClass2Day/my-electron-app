@@ -1,19 +1,16 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>Backup Tool</title>
-  </head>
-  <body>
-    <h2>Simple Backup Tool</h2>
-    <p>
-      Source: <span id="sourcePath">None</span><br>
-      Destination: <span id="destPath">None</span>
-    </p>
-    <button id="selectSource">Select Source</button>
-    <button id="selectDest">Select Destination</button>
-    <button id="startBackup">Start Backup</button>
-    <p id="status"></p>
-
-    <script src="renderer.js"></script>
-  </body>
+<head>
+  <title>Backup App</title>
+</head>
+<body>
+  <h2>Backup File Comparison Tool</h2>
+  <button id="selectDest">Select Destination Drive</button>
+  <p id="destDisplay">No destination selected</p>
+  <button id="compareBtn">Compare Files</button>
+  <div id="fileTree" style="margin-top:20px;"></div>
+  <button id="copyBtn">Copy Selected Files</button>
+  <p id="status"></p>
+  <script src="renderer.js"></script>
+</body>
 </html>
