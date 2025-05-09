@@ -1,0 +1,29 @@
+.tree-view,
+.tree-view ul {
+  list-style-type: none;
+  padding-left: 1em;
+  margin: 0;
+  position: relative;
+}
+
+.tree-view li {
+  margin: 0.3em 0;
+  position: relative;
+}
+
+.tree-view .toggle {
+  cursor: pointer;
+  display: inline-block;
+  width: 1em;
+  margin-right: 0.3em;
+}
+
+.tree-view .label {
+  cursor: pointer;
+}
+
+.tree-view input[type="checkbox"] {
+  margin-right: 0.5em;
+}
+
+/* Optional: add hover and collapse/expand behaviors with JS */

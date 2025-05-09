@@ -16,7 +16,7 @@ document.getElementById('compareBtn').addEventListener('click', async () => {
 });
 
 function renderTreeView(data) {
-  const container = document.getElementById('fileTree');
+  const container = document.getElementById('tree-view');
   container.innerHTML = '';
   for (const [folder, files] of Object.entries(data)) {
     const ul = document.createElement('ul');
@@ -31,6 +31,14 @@ function renderTreeView(data) {
     });
 
     container.appendChild(ul);
+  }
+
+  if (data && Object.keys(data).length > 0) {
+    //container.hidden = false; // 👈 show it
+    container.style.display = 'block'; // 👈 show it
+  } else {
+    //container.hidden = true; // 👈 hide it
+    container.style.display = 'none'; // 👈 hide it
   }
 }
 

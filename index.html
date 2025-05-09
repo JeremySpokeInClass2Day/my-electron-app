@@ -1,16 +1,96 @@
 <!DOCTYPE html>
 <html>
 <head>
+  <meta charset="UTF-8">
   <title>Backup App</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      padding: 20px;
+    }
+
+    h1 {
+      margin-bottom: 20px;
+    }
+
+    .controls {
+      margin-bottom: 20px;
+    }
+
+    button {
+      padding: 8px 12px;
+      margin-right: 10px;
+      cursor: pointer;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      background-color: #f0f0f0;
+    }
+
+    .tree-view,
+    .tree-view ul {
+      list-style-type: none;
+      padding-left: 1em;
+      margin: 0;
+      position: relative;
+    }
+
+    .tree-view li {
+      margin: 0.3em 0;
+      position: relative;
+    }
+
+    .tree-view .toggle {
+      cursor: pointer;
+      display: inline-block;
+      width: 1em;
+      margin-right: 0.3em;
+    }
+
+    .tree-view .label {
+      cursor: pointer;
+    }
+
+    .tree-view input[type="checkbox"] {
+      margin-right: 0.5em;
+    }
+
+    .tree-container {
+      border: 1px solid #ddd;
+      padding: 10px;
+      border-radius: 5px;
+      background: #fafafa;
+    }
+
+    #tree-view {
+      display: none;
+    }
+  </style>
 </head>
 <body>
-  <h2>Backup File Comparison Tool</h2>
-  <button id="selectDest">Select Destination Drive</button>
+  <h1>Backup App</h1>
+
+  <div class="controls">
+    <button id="selectDest">Select Destination Drive</button>
   <p id="destDisplay">No destination selected</p>
-  <button id="compareBtn">Compare Files</button>
-  <div id="fileTree" style="margin-top:20px;"></div>
-  <button id="copyBtn">Copy Selected Files</button>
-  <p id="status"></p>
+    <button id="compareBtn">Compare</button>
+    <button id="copyBtn">Copy Selected</button>
+  </div>
+
+  <div id="tree-view" class="tree-container">
+    <ul id="tree" class="tree-view"></ul>
+  </div>
+
+  <script>
+    document.querySelectorAll('.tree-view input[type="checkbox"]').forEach(cb => {
+      cb.addEventListener('change', function () {
+        const parentLi = this.closest('li');
+        const childCheckboxes = parentLi.querySelectorAll('ul input[type="checkbox"]');
+        childCheckboxes.forEach(child => child.checked = this.checked);
+      });
+    });
+
+  </script>
+
   <script src="renderer.js"></script>
 </body>
 </html>
